@@ -2,17 +2,19 @@ import json
 import yaml
 import hashlib
 
+# Define a class for generating Kubernetes resources
 class ResourceGenerator:
     def __init__(self, templates):
         self.templates = templates
-        self.generated_servers = set()
-        self.generated_routes = set()
-        self.generated_mesh_tls_auth = set()
-        self.generated_auth_policies = set()
-        self.server_name = ""
-        self.http_route_name = ""
-        self.auth_policy_map = {}  # Dictionary to map Auth Policies to HTTPRoutes
+        self.generated_servers = set()           # Track generated Server resources
+        self.generated_routes = set()            # Track generated HTTPRoute resources
+        self.generated_mesh_tls_auth = set()     # Track generated MeshTLSAuthentication resources
+        self.generated_auth_policies = set()     # Track generated AuthorizationPolicy resources
+        self.server_name = ""                    # Store the current server name
+        self.http_route_name = ""                # Store the current HTTPRoute name
+        self.auth_policy_map = {}                # Dictionary to map Auth Policies to HTTPRoutes
 
+    # Generate Server resource
     def generate_server(self, destination_namespace, destination_pod, destination_port):
         self.server_name = f"{destination_pod}-server-{destination_port}"
         if self.server_name not in self.generated_servers:
@@ -26,6 +28,7 @@ class ResourceGenerator:
             return server_resource
         return ""
 
+    # Generate HTTPRoute resource
     def generate_http_route(self, destination_namespace, destination_pod, path, method):
         unique_identifier = hashlib.md5(f"{destination_pod}-{path}-{method}".encode()).hexdigest()
         self.http_route_name = f"{self.server_name}-http-route-{unique_identifier}"
@@ -42,6 +45,7 @@ class ResourceGenerator:
             return http_route_resource
         return ""
 
+    # Generate MeshTLSAuthentication resource
     def generate_mesh_tls(self, destination_namespace, client_identity):
         mesh_tls_name = f"{client_identity}-mesh-tls"
         if mesh_tls_name not in self.generated_mesh_tls_auth:
@@ -54,6 +58,7 @@ class ResourceGenerator:
             return mesh_tls_resource
         return ""
 
+    # Generate AuthorizationPolicy resource
     def generate_auth_policy(self, destination_namespace, http_route_name, mesh_tls_name):
         auth_policy_name = f"{self.http_route_name}-auth-policy"
         if auth_policy_name not in self.generated_auth_policies:
@@ -70,24 +75,23 @@ class ResourceGenerator:
             return auth_policy_resource
         return ""
 
-    def validate_http_routes(self):
-        for route_name in self.generated_routes:
-            if route_name not in self.generated_auth_policies:
-                print(f"Warning: HTTPRoute {route_name} is not referenced by any auth policy.")
-
+    # Get the associated HTTPRoute for a given Auth Policy
     def get_http_route_for_auth_policy(self, auth_policy_name):
         return self.auth_policy_map.get(auth_policy_name, None)
 
+# Load YAML templates for Kubernetes resources
 def load_templates(template_file):
     with open(template_file, "r") as file:
         templates = yaml.load(file, Loader=yaml.FullLoader)
     return templates
 
+# Main function for generating Kubernetes resources
 def main():
     tap_data_file = "tap_data.json"
     output_file = "output.yaml"
     template_file = "templates.yaml"
 
+    # Load templates for Kubernetes resources
     templates = load_templates(template_file)
     resource_generator = ResourceGenerator(templates)
 
@@ -111,7 +115,7 @@ def main():
                 request_init_event = entry["requestInitEvent"]
                 path = request_init_event.get("path", "/")
                 method = request_init_event.get("method", "GET")
-                
+
                 if entry.get("proxyDirection") != "OUTBOUND":
                     server_resource = resource_generator.generate_server(destination_namespace, destination_pod, destination_port)
                     http_route_resource = resource_generator.generate_http_route(destination_namespace, destination_pod, path, method)
