@@ -1,0 +1,55 @@
+server_template: |
+  apiVersion: policy.linkerd.io/v1beta1
+  kind: Server
+  metadata:
+    namespace: {namespace}
+    name: {server_name}
+  spec:
+    podSelector:
+      matchLabels:
+        app: {destination_pod}
+    port: {destination_port}
+
+http_route_template: |
+  apiVersion: policy.linkerd.io/v1beta1
+  kind: HTTPRoute
+  metadata:
+    namespace: {namespace}
+    name: {http_route_name}
+  spec:
+    parentRefs:
+      - name: {server_name}
+        kind: Server
+        group: policy.linkerd.io
+    rules:
+      - matches:
+        - path:
+            value: "{path}"
+            type: PathPrefix
+          method: "{method}"
+
+mesh_tls_template: |
+  apiVersion: policy.linkerd.io/v1alpha1
+  kind: MeshTLSAuthentication
+  metadata:
+    namespace: {namespace}
+    name: {mesh_tls_name}
+  spec:
+    identities:
+      - "{client_identity}"
+
+auth_policy_template: |
+  apiVersion: policy.linkerd.io/v1alpha1
+  kind: AuthorizationPolicy
+  metadata:
+    namespace: {namespace}
+    name: {auth_policy_name}
+  spec:
+    targetRef:
+      group: policy.linkerd.io
+      kind: HTTPRoute
+      name: {http_route_name}
+    requiredAuthenticationRefs:
+      - name: {mesh_tls_name}
+        kind: MeshTLSAuthentication
+        group: policy.linkerd.io
