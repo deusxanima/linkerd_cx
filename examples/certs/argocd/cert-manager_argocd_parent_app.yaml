@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: certs
+  labels:
+    type: main
+  namespace: cert-manager
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: cert-manager
+  source:
+    path: examples/certs/argocd/cm_apps
+    repoURL: git@github.com:deusxanima/linkerd_cx.git
+    targetRevision: HEAD
+    directory:
+      recurse: true
+      jsonnet: {}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cert-manager
+  syncPolicy:
+    automated:
+      prune: true
+      allowEmpty: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

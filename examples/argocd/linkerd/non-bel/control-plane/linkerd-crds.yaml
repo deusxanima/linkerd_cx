@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: linkerd-crds
+  namespace: linkerd
+  labels:
+    type: child
+spec:
+  project: linkerd
+  source:
+    chart: linkerd-crds
+    repoURL: 'https://helm.linkerd.io/stable'
+    targetRevision: 1.8.0
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: linkerd
