@@ -17,3 +17,10 @@ spec:
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: cert-manager
+  syncPolicy:
+    automated:
+      prune: true
+      allowEmpty: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
