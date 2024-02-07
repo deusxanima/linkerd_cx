@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: linkerd-control-plane
-  namespace: linkerd
+  namespace: argocd
   labels:
     type: child
 spec:
