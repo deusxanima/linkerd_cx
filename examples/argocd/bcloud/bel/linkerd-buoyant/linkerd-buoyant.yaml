@@ -7,16 +7,16 @@ metadata:
     type: child
 spec:
   project: linkerd
-  source:
-    chart: linkerd-buoyant
-    repoURL: https://helm.buoyant.cloud 
-    targetRevision: 0.26.1
-    helm:
-      valueFiles:
-      - $values/examples/argocd/bcloud/bel/linkerd-buoyant/values.yaml
-  - repoURL: 'git@github.com:deusxanima/linkerd_cx.git'
-    targetRevision: HEAD
-    ref: values
+  sources:
+    - repoURL: https://helm.buoyant.cloud
+      chart: linkerd-buoyant
+      targetRevision: 0.26.1
+      helm:
+        valueFiles:
+        - $values/examples/argocd/bcloud/bel/linkerd-buoyant/values.yaml
+    - repoURL: 'git@github.com:deusxanima/linkerd_cx.git'
+      targetRevision: HEAD
+      ref: values
   destination:
     namespace: linkerd-buoyant
     server: https://kubernetes.default.svc
