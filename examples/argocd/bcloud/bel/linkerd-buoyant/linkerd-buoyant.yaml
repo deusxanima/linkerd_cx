@@ -25,6 +25,8 @@ spec:
         value: U561gsnZ9PCb7MG-
       - name: api.clientSecret
         value: 0677edf6dcd92c2726090e492b633deb92589a759f1a53a3287f821312546179
+      - name: controlPlaneOperator.logLevel
+        value: debug
       valueFiles:
       - values.yaml
   destination:
