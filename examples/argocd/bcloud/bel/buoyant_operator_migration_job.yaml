@@ -1,0 +1,59 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: buoyant-operator-migration
+  namespace: linkerd
+spec:
+  template:
+    spec:
+      serviceAccountName: buoyant-operator-migration
+      containers:
+      - name: buoyant-operator-migration-job
+        image: alpine:latest
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          apk add --no-cache curl bash jq openssl
+          wget https://github.com/mikefarah/yq/releases/download/v4.6.3/yq_linux_amd64 -O /usr/bin/yq && chmod +x /usr/bin/yq
+          wget https://get.helm.sh/helm-v3.5.4-linux-amd64.tar.gz && tar -zxvf helm-v3.5.4-linux-amd64.tar.gz && mv linux-amd64/helm /usr/local/bin/helm
+          wget -O /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/$(wget -qO- https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && chmod +x /usr/local/bin/kubectl
+          wget -qO- https://run.linkerd.io/install | sh
+          export PATH=$PATH:/root/.linkerd2/bin
+          # Add Helm repo for Linkerd
+          helm repo add linkerd https://helm.linkerd.io/stable
+          helm repo update
+          # Add required helm annotations and labels for the linkerd-crds chart
+          for crd in $(linkerd install --crds --ignore-cluster | yq e -N '.metadata.name' -)
+          do
+            kubectl annotate crd "${crd}" meta.helm.sh/release-name=linkerd-crds --overwrite
+            kubectl annotate crd "${crd}" meta.helm.sh/release-namespace=linkerd --overwrite
+            kubectl label crd "${crd}" app.kubernetes.io/managed-by=Helm --overwrite
+          done
+          # Takeover the linkerd-crds chart
+          helm upgrade -i linkerd-crds linkerd/linkerd-crds -n linkerd
+          # Set up our takeover script
+          echo '#!/bin/bash' > takeover.sh
+          # Create the commands that will create the required annotations
+          linkerd install --ignore-cluster | yq e -N '.kind, .metadata.name, .metadata.namespace' - | xargs -n3 sh -c 'echo "kubectl annotate --overwrite -n $2 $0/$1 meta.helm.sh/release-name=linkerd-control-plane meta.helm.sh/release-namespace=linkerd"'| grep -v '/null' | sed "s/ -n null//g" >> takeover.sh
+          # Create the commands that will create the required labels
+          linkerd install --ignore-cluster | yq e -N '.kind, .metadata.name, .metadata.namespace' - | xargs -n3 sh -c 'echo "kubectl label --overwrite -n $2 $0/$1 app.kubernetes.io/managed-by=Helm"'| grep -v '/null' | sed "s/ -n null//g" >> takeover.sh
+          # Get the existing trust anchor and issuer cert/key from cluster secrets, and temporarily write them to the local filesystem
+          kubectl get secret linkerd-identity-issuer -n linkerd -o json | jq -r '.data["ca.crt"]' | base64 -d > ca.crt
+          kubectl get secret linkerd-identity-issuer -n linkerd -o json | jq -r '.data["tls.crt"]' | base64 -d > issuer.crt
+          kubectl get secret linkerd-identity-issuer -n linkerd -o json | jq -r '.data["tls.key"]' | base64 -d > issuer.key
+          # Run the takeover script
+          chmod +x takeover.sh
+          ./takeover.sh
+          # Create helm release for linkerd-control-plane
+          helm upgrade -i linkerd-control-plane \
+            -n linkerd \
+            --set-file identityTrustAnchorsPEM=ca.crt \
+            --set-file identity.issuer.tls.crtPEM=issuer.crt \
+            --set-file identity.issuer.tls.keyPEM=issuer.key \
+            linkerd/linkerd-control-plane
+          # Download the linkerd-buoyant CLI client
+          curl -sL https://buoyant.cloud/install | sh
+          # Transfer linkerd-control-plane & linkerd-crds deployments to buoyant buoyant-operator
+          linkerd-buoyant controlplane import-helm-config | sh
+      restartPolicy: Never
+  backoffLimit: 4
