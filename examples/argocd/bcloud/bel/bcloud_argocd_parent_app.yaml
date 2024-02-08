@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: linkerd-buoyant
+  name: buoyant
   labels:
     type: main
   namespace: argocd
