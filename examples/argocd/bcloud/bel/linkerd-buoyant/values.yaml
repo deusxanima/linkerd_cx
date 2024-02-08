@@ -6,12 +6,7 @@ metadata:
   agentName: alen-argo-cluster
 
 agent:
-  apiAddress: api.staging-buoyant.cloud:443
+  apiAddress: api.buoyant.cloud:443
 
 api:
-  apiAddress: api.staging-buoyant.cloud:443
-
-identity:
-  experimentalEnv:
-  - name: ENVIRONMENT
-    value: staging
+  apiAddress: api.buoyant.cloud:443
