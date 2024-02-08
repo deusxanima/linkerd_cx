@@ -27,6 +27,8 @@ spec:
         value: 0677edf6dcd92c2726090e492b633deb92589a759f1a53a3287f821312546179
       - name: controlPlaneOperator.logLevel
         value: debug
+      - name: identity.experimentalEnv[0].name: ENVIRONMENT
+        value: staging
       valueFiles:
       - values.yaml
   destination:
