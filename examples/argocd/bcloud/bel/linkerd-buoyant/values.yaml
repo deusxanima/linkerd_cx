@@ -3,10 +3,4 @@ controlPlaneOperator:
   logLevel: debug
 
 metadata:
-  agentName: alen-argo-cluster
-
-agent:
-  apiAddress: api.buoyant.cloud:443
-
-api:
-  apiAddress: api.buoyant.cloud:443
+  agentName: example-argo-cluster
