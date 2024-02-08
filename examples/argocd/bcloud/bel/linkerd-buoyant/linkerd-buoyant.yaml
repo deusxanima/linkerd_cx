@@ -18,7 +18,7 @@ spec:
       - name: metadata.agentName
         value: alen-argo-cluster
       - name: api.apiAddress
-        value: "api.staging-buoyant.cloud:443"
+        value: api.staging-buoyant.cloud:443
       - name: api.clientID
         value: U561gsnZ9PCb7MG-
       - name: api.clientSecret
