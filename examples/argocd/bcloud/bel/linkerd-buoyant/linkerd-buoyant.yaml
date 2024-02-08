@@ -12,25 +12,11 @@ spec:
     repoURL: https://helm.buoyant.cloud 
     targetRevision: 0.26.1
     helm:
-      parameters:
-      - name: controlPlaneOperator.helmDockerConfigJSONSecret
-        value: "buoyant-registry-secret"
-      - name: metadata.agentName
-        value: alen-argo-cluster
-      - name: agent.apiAddress
-        value: api.staging-buoyant.cloud:443
-      - name: api.apiAddress
-        value: api.staging-buoyant.cloud:443
-      - name: api.clientID
-        value: U561gsnZ9PCb7MG-
-      - name: api.clientSecret
-        value: 0677edf6dcd92c2726090e492b633deb92589a759f1a53a3287f821312546179
-      - name: controlPlaneOperator.logLevel
-        value: debug
-      - name: identity.experimentalEnv[0].name: ENVIRONMENT
-        value: staging
       valueFiles:
-      - values.yaml
+      - $values/examples/argocd/bcloud/bel/linkerd-buoyant/values.yaml
+  - repoURL: 'git@github.com:deusxanima/linkerd_cx.git'
+    targetRevision: HEAD
+    ref: values
   destination:
     namespace: linkerd-buoyant
     server: https://kubernetes.default.svc

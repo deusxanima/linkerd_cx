@@ -1,0 +1,17 @@
+controlPlaneOperator:
+  helmDockerConfigJSONSecret: "buoyant-registry-secret"
+  logLevel: debug
+
+metadata:
+  agentName: alen-argo-cluster
+
+agent:
+  apiAddress: api.staging-buoyant.cloud:443
+
+api:
+  apiAddress: api.staging-buoyant.cloud:443
+
+identity:
+  experimentalEnv:
+  - name: ENVIRONMENT
+    value: staging
