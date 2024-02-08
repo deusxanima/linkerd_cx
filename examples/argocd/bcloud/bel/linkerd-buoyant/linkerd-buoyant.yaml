@@ -17,6 +17,12 @@ spec:
         value: "buoyant-registry-secret"
       - name: metadata.agentName
         value: alen-argo-cluster
+      - name: api.apiAddress
+        value: "api.staging-buoyant.cloud:443"
+      - name: api.clientID
+        value: U561gsnZ9PCb7MG-
+      - name: api.clientSecret
+        value: 0677edf6dcd92c2726090e492b633deb92589a759f1a53a3287f821312546179
       valueFiles:
       - values.yaml
   destination:
