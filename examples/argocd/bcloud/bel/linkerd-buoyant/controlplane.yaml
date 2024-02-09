@@ -1,11 +1,11 @@
 apiVersion: linkerd.buoyant.io/v1alpha1
 kind: ControlPlane
 metadata:
-  annotations:
   name: cp-update
 spec:
   components:
     linkerd:
+      version: stable-2.14.9
       controlPlaneConfig:
         controllerReplicas: 1
         identity:
@@ -23,4 +23,3 @@ spec:
           TexGX4d2Jx4ZW0tu7Vij0v3v/NEThva/LuNSAiEA5Y+Dgvc8B75X2wSTAzwE7WYl
           KyO/qin/OUtoZg7dPqQ=
           -----END CERTIFICATE-----
-      version: stable-2.14.9
