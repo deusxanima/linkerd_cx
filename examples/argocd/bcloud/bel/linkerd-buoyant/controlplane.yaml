@@ -4,9 +4,6 @@ items:
   kind: ControlPlane
   metadata:
     annotations:
-      kubectl.kubernetes.io/last-applied-configuration: |
-        {"apiVersion":"linkerd.buoyant.io/v1alpha1","kind":"ControlPlane","metadata":{"annotations":{},"creationTimestamp":"2024-02-08T17:42:49Z","generation":1,"name":"cp-update","resourceVersion":"334234","uid":"6b882d00-7f0d-4346-9318-900abab6b709"},"spec":{"components":{"linkerd":{"controlPlaneConfig":{"controllerReplicas":2,"identity":{"issuer":{"scheme":"kubernetes.io/tls"}},"identityTrustAnchorsPEM":"-----BEGIN CERTIFICATE-----\nMIIBijCCATCgAwIBAgIQJuzts8o26L8PlBK60DMY+jAKBggqhkjOPQQDAjAlMSMw\nIQYDVQQDExpyb290LmxpbmtlcmQuY2x1c3Rlci5sb2NhbDAeFw0yNDAyMDgxNDA2\nNTlaFw0zNDAyMDUxNDA2NTlaMCUxIzAhBgNVBAMTGnJvb3QubGlua2VyZC5jbHVz\ndGVyLmxvY2FsMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAElDw6FrKat6fdvQbV\nnE1JB1kuxgah6s3FFymwuctOmdqrvLThJPgV+bG2qUIiLOSkU9F/DxoCLwHBXTYK\n6AQ1EKNCMEAwDgYDVR0PAQH/BAQDAgKkMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0O\nBBYEFIyaOWyqpF2T87k9A15/8tCSF11MMAoGCCqGSM49BAMCA0gAMEUCIFHMhyd9\nTexGX4d2Jx4ZW0tu7Vij0v3v/NEThva/LuNSAiEA5Y+Dgvc8B75X2wSTAzwE7WYl\nKyO/qin/OUtoZg7dPqQ=\n-----END CERTIFICATE-----\n"},"version":"stable-2.14.9"}}}}
-    creationTimestamp: "2024-02-08T17:42:49Z"
     generation: 2
     name: cp-update
     resourceVersion: "373214"
@@ -15,7 +12,7 @@ items:
     components:
       linkerd:
         controlPlaneConfig:
-          controllerReplicas: 2
+          controllerReplicas: 1
           identity:
             issuer:
               scheme: kubernetes.io/tls
@@ -32,13 +29,6 @@ items:
             KyO/qin/OUtoZg7dPqQ=
             -----END CERTIFICATE-----
         version: stable-2.14.9
-  status:
-    current: stable-2.14.9
-    desired: stable-2.14.9
-    lastUpdateAttempt: "2024-02-08T22:43:51Z"
-    lastUpdateAttemptMessage: control-plane update to stable-2.14.9 succeeded
-    lastUpdateAttemptResult: UpToDate
-    status: UpToDate
 kind: List
 metadata:
   resourceVersion: ""
