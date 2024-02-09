@@ -1,28 +1,26 @@
-apiVersion: v1
-items:
-- apiVersion: linkerd.buoyant.io/v1alpha1
-  kind: ControlPlane
-  metadata:
-    annotations:
-    name: cp-update
-  spec:
-    components:
-      linkerd:
-        controlPlaneConfig:
-          controllerReplicas: 1
-          identity:
-            issuer:
-              scheme: kubernetes.io/tls
-          identityTrustAnchorsPEM: |
-            -----BEGIN CERTIFICATE-----
-            MIIBijCCATCgAwIBAgIQJuzts8o26L8PlBK60DMY+jAKBggqhkjOPQQDAjAlMSMw
-            IQYDVQQDExpyb290LmxpbmtlcmQuY2x1c3Rlci5sb2NhbDAeFw0yNDAyMDgxNDA2
-            NTlaFw0zNDAyMDUxNDA2NTlaMCUxIzAhBgNVBAMTGnJvb3QubGlua2VyZC5jbHVz
-            dGVyLmxvY2FsMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAElDw6FrKat6fdvQbV
-            nE1JB1kuxgah6s3FFymwuctOmdqrvLThJPgV+bG2qUIiLOSkU9F/DxoCLwHBXTYK
-            6AQ1EKNCMEAwDgYDVR0PAQH/BAQDAgKkMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0O
-            BBYEFIyaOWyqpF2T87k9A15/8tCSF11MMAoGCCqGSM49BAMCA0gAMEUCIFHMhyd9
-            TexGX4d2Jx4ZW0tu7Vij0v3v/NEThva/LuNSAiEA5Y+Dgvc8B75X2wSTAzwE7WYl
-            KyO/qin/OUtoZg7dPqQ=
-            -----END CERTIFICATE-----
-        version: stable-2.14.9
+apiVersion: linkerd.buoyant.io/v1alpha1
+kind: ControlPlane
+metadata:
+  annotations:
+  name: cp-update
+spec:
+  components:
+    linkerd:
+      controlPlaneConfig:
+        controllerReplicas: 1
+        identity:
+          issuer:
+            scheme: kubernetes.io/tls
+        identityTrustAnchorsPEM: |
+          -----BEGIN CERTIFICATE-----
+          MIIBijCCATCgAwIBAgIQJuzts8o26L8PlBK60DMY+jAKBggqhkjOPQQDAjAlMSMw
+          IQYDVQQDExpyb290LmxpbmtlcmQuY2x1c3Rlci5sb2NhbDAeFw0yNDAyMDgxNDA2
+          NTlaFw0zNDAyMDUxNDA2NTlaMCUxIzAhBgNVBAMTGnJvb3QubGlua2VyZC5jbHVz
+          dGVyLmxvY2FsMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAElDw6FrKat6fdvQbV
+          nE1JB1kuxgah6s3FFymwuctOmdqrvLThJPgV+bG2qUIiLOSkU9F/DxoCLwHBXTYK
+          6AQ1EKNCMEAwDgYDVR0PAQH/BAQDAgKkMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0O
+          BBYEFIyaOWyqpF2T87k9A15/8tCSF11MMAoGCCqGSM49BAMCA0gAMEUCIFHMhyd9
+          TexGX4d2Jx4ZW0tu7Vij0v3v/NEThva/LuNSAiEA5Y+Dgvc8B75X2wSTAzwE7WYl
+          KyO/qin/OUtoZg7dPqQ=
+          -----END CERTIFICATE-----
+      version: stable-2.14.9
