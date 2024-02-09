@@ -7,7 +7,3 @@ controlPlaneOperator:
 
 metadata:
   agentName: example-argo-cluster
-
-api:
-  clientID: fQh-LCzxj3Qy7igE
-  clientSecret: 4cbacba962056c614d7c0278462457b3eef0b4c88164cbba469575dc5a21a9ef
