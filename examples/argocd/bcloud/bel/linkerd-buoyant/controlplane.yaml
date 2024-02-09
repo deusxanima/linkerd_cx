@@ -4,10 +4,7 @@ items:
   kind: ControlPlane
   metadata:
     annotations:
-    generation: 2
     name: cp-update
-    resourceVersion: "373214"
-    uid: 6b882d00-7f0d-4346-9318-900abab6b709
   spec:
     components:
       linkerd:
@@ -29,6 +26,3 @@ items:
             KyO/qin/OUtoZg7dPqQ=
             -----END CERTIFICATE-----
         version: stable-2.14.9
-kind: List
-metadata:
-  resourceVersion: ""
