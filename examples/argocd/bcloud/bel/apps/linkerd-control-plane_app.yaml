@@ -33,28 +33,46 @@ spec:
           health.lua: |
             local replicas = obj.spec.replicas or 1
             local availableReplicas = obj.status.availableReplicas or 0
-            if availableReplicas == replicas then
-              return {status="Healthy", message="linkerd-destination is healthy"}
+            -- Check if the resource is in the 'linkerd' namespace
+            if obj.metadata.namespace == "linkerd" then
+              if availableReplicas == replicas then
+                return {status="Healthy", message="linkerd-destination is healthy"}
+              else
+                return {status="Degraded", message="linkerd-destination is degraded"}
+              end
             else
-              return {status="Degraded", message="linkerd-destination is degraded"}
+              -- Resource is not in the 'linkerd' namespace, consider it healthy
+              return {status="Degraded", message="Resource is not in 'linkerd' namespace"}
             end
         - resource.kind: Deployment
           resource.name: linkerd-proxy-injector
           health.lua: |
             local replicas = obj.spec.replicas or 1
             local availableReplicas = obj.status.availableReplicas or 0
-            if availableReplicas == replicas then
-              return {status="Healthy", message="linkerd-proxy-injector is healthy"}
+            -- Check if the resource is in the 'linkerd' namespace
+            if obj.metadata.namespace == "linkerd" then
+              if availableReplicas == replicas then
+                return {status="Healthy", message="linkerd-proxy-injector is healthy"}
+              else
+                return {status="Degraded", message="linkerd-proxy-injector is degraded"}
+              end
             else
-              return {status="Degraded", message="linkerd-proxy-injector is degraded"}
+              -- Resource is not in the 'linkerd' namespace, consider it healthy
+              return {status="Degraded", message="Resource is not in 'linkerd' namespace"}
             end
         - resource.kind: Deployment
           resource.name: linkerd-identity
           health.lua: |
             local replicas = obj.spec.replicas or 1
             local availableReplicas = obj.status.availableReplicas or 0
-            if availableReplicas == replicas then
-              return {status="Healthy", message="linkerd-identity is healthy"}
+            -- Check if the resource is in the 'linkerd' namespace
+            if obj.metadata.namespace == "linkerd" then
+              if availableReplicas == replicas then
+                return {status="Healthy", message="linkerd-identity is healthy"}
+              else
+                return {status="Degraded", message="linkerd-identity is degraded"}
+              end
             else
-              return {status="Degraded", message="linkerd-identity is degraded"}
+              -- Resource is not in the 'linkerd' namespace, consider it healthy
+              return {status="Degraded", message="Resource is not in 'linkerd' namespace"}
             end
