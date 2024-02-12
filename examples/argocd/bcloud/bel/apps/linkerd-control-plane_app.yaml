@@ -44,6 +44,11 @@ spec:
               -- Resource is not in the 'linkerd' namespace, consider it healthy
               return {status="Degraded", message="Resource is not in 'linkerd' namespace"}
             end
+          if availableReplicas == replicas then
+            os.exit(0)  -- Healthy
+          else
+            os.exit(1)  -- Degraded
+          end
         - resource.kind: Deployment
           resource.name: linkerd-proxy-injector
           health.lua: |
@@ -60,6 +65,11 @@ spec:
               -- Resource is not in the 'linkerd' namespace, consider it healthy
               return {status="Degraded", message="Resource is not in 'linkerd' namespace"}
             end
+          if availableReplicas == replicas then
+            os.exit(0)  -- Healthy
+          else
+            os.exit(1)  -- Degraded
+          end
         - resource.kind: Deployment
           resource.name: linkerd-identity
           health.lua: |
@@ -76,3 +86,8 @@ spec:
               -- Resource is not in the 'linkerd' namespace, consider it healthy
               return {status="Degraded", message="Resource is not in 'linkerd' namespace"}
             end
+          if availableReplicas == replicas then
+            os.exit(0)  -- Healthy
+          else
+            os.exit(1)  -- Degraded
+          end
