@@ -1,0 +1,64 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: linkerd
+  labels:
+    type: main
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: linkerd
+  source:
+    path: examples/argocd/linkerd/bel/
+    repoURL: git@github.com:deusxanima/linkerd_cx.git
+    targetRevision: HEAD
+    directory:
+      recurse: true
+      jsonnet: {}
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: linkerd
+  syncPolicy:
+    automated:
+      prune: true
+      allowEmpty: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    health:
+    # Health monitoring for linkerd deployments managed by BEL Operator
+      customizations:
+        - resource.kind: Deployment
+          resource.name: linkerd-destination
+          health.lua: |
+            local replicas = obj.spec.replicas or 1
+            local availableReplicas = obj.status.availableReplicas or 0
+            
+            if availableReplicas == replicas then
+              return {status="Healthy", message="linkerd-destination is healthy"}
+            else
+              return {status="Degraded", message="linkerd-destination is degraded"}
+            end
+        - resource.kind: Deployment
+          resource.name: linkerd-proxy-injector
+          health.lua: |
+            local replicas = obj.spec.replicas or 1
+            local availableReplicas = obj.status.availableReplicas or 0
+            
+            if availableReplicas == replicas then
+              return {status="Healthy", message="linkerd-proxy-injector is healthy"}
+            else
+              return {status="Degraded", message="linkerd-proxy-injector is degraded"}
+            end
+        - resource.kind: Deployment
+          resource.name: linkerd-identity
+          health.lua: |
+            local replicas = obj.spec.replicas or 1
+            local availableReplicas = obj.status.availableReplicas or 0
+            
+            if availableReplicas == replicas then
+              return {status="Healthy", message="linkerd-identity is healthy"}
+            else
+              return {status="Degraded", message="linkerd-identity is degraded"}
+            end
