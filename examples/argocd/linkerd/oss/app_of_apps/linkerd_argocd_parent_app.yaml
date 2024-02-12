@@ -10,7 +10,7 @@ metadata:
 spec:
   project: linkerd
   source:
-    path: examples/argocd/linkerd/non-bel/control-plane
+    path: examples/argocd/linkerd/non-bel/linkerd-control-plane
     repoURL: git@github.com:deusxanima/linkerd_cx.git
     targetRevision: HEAD
     directory:
