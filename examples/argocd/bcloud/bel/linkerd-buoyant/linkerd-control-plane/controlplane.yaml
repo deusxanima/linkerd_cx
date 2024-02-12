@@ -1,7 +1,7 @@
 apiVersion: linkerd.buoyant.io/v1alpha1
 kind: ControlPlane
 metadata:
-  name: cp-update
+  name: linkerd-control-plane-crd
 spec:
   components:
     linkerd:
