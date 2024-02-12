@@ -27,14 +27,12 @@ spec:
     syncOptions:
       - CreateNamespace=true
     health:
-    # Health monitoring for linkerd deployments managed by BEL Operator
       customizations:
         - resource.kind: Deployment
           resource.name: linkerd-destination
           health.lua: |
             local replicas = obj.spec.replicas or 1
             local availableReplicas = obj.status.availableReplicas or 0
-            
             if availableReplicas == replicas then
               return {status="Healthy", message="linkerd-destination is healthy"}
             else
@@ -45,7 +43,6 @@ spec:
           health.lua: |
             local replicas = obj.spec.replicas or 1
             local availableReplicas = obj.status.availableReplicas or 0
-            
             if availableReplicas == replicas then
               return {status="Healthy", message="linkerd-proxy-injector is healthy"}
             else
@@ -56,7 +53,6 @@ spec:
           health.lua: |
             local replicas = obj.spec.replicas or 1
             local availableReplicas = obj.status.availableReplicas or 0
-            
             if availableReplicas == replicas then
               return {status="Healthy", message="linkerd-identity is healthy"}
             else
