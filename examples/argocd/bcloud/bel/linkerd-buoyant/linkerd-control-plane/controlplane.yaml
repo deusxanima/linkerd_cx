@@ -7,7 +7,7 @@ spec:
     linkerd:
       version: stable-2.14.9
       controlPlaneConfig:
-        controllerReplicas: 1
+        controllerReplicas: 2
         identity:
           issuer:
             scheme: kubernetes.io/tls
